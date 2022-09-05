@@ -49,35 +49,38 @@ function mergeSort(arr) {
   let half = Math.floor(arr.length / 2);
   let left = arr.slice(0, half);
   let right = arr.slice(half);
-  mergeSort(left);
-  mergeSort(right);
 
-  return merge(left, right);
+  return merge(mergeSort(left), mergeSort(right));
 }
 
-function merge(arr1, arr2) {
+function merge(left, right) {
+  // left.length === right.length
+  // or: right.length - left.length === 1
   let mergeArr = [];
   let i = 0;
   let j = 0;
 
-  while (i < arr1.length && j < arr2.length) {
-    if (arr1[i] <= arr2[j]) {
-      mergeArr.push(arr1[i]);
+  while (i < left.length && j < right.length) {
+    if (left[i] <= right[j]) {
+      mergeArr.push(left[i]);
       i++;
     } else {
-      mergeArr.push(arr2[j]);
+      mergeArr.push(right[j]);
       j++;
     }
   }
 
-  if (arr1.length < arr2.length) {
-    mergeArr = [mergeArr, ...arr2.slice(arr1.length)];
-  } else if (arr1.length > arr2.length) {
-    mergeArr = [mergeArr, ...arr1.slice(arr2.length)];
+  if (i < left.length) {
+    mergeArr = [...mergeArr, ...left.slice(i)];
+  }
+
+  if (j < right.length) {
+    mergeArr = [...mergeArr, ...right.slice(j)];
   }
 
   return mergeArr;
 }
 
 let array = [5, 4, 2, 1, 4, 1, 3, 8, 9, 6, 7];
+console.log(merge([1, 8, 9], [2, 4, 5, 6]));
 console.log(mergeSort(array));
